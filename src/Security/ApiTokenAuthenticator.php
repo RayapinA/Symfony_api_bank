@@ -99,7 +99,21 @@ Class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         ];
     }
 
-
+    /**
+     * Return a UserInterface object based on the credentials.
+     *
+     * The *credentials* are the return value from getCredentials()
+     *
+     * You may throw an AuthenticationException if you wish. If you return
+     * null, then a UsernameNotFoundException is thrown for you.
+     *
+     * @param mixed $credentials
+     * @param UserProviderInterface $userProvider
+     *
+     * @throws AuthenticationException
+     *
+     * @return UserInterface|null
+     */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $apiKey = $credentials['token'];
