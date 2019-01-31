@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -53,6 +55,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Card", mappedBy="user")
+     */
+    private $card;
+
+    public function __construct()
+    {
+        $this->card = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -161,5 +173,36 @@ class User implements UserInterface
     {
         return $array = array();
         //return $this->roles;
+    }
+
+    /**
+     * @return Collection|Card[]
+     */
+    public function getCard(): Collection
+    {
+        return $this->card;
+    }
+
+    public function addCard(Card $card): self
+    {
+        if (!$this->card->contains($card)) {
+            $this->card[] = $card;
+            $card->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCard(Card $card): self
+    {
+        if ($this->card->contains($card)) {
+            $this->card->removeElement($card);
+            // set the owning side to null (unless already changed)
+            if ($card->getUser() === $this) {
+                $card->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
