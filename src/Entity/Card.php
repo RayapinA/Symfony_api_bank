@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CardRepository")
@@ -17,26 +18,31 @@ class Card
     private $id;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardType;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardNumber;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255)
      */
     private $currencyCode;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="integer")
      */
     private $value;

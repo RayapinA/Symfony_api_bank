@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Null_;
@@ -15,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use FOS\RestBundle\View\View;
+use FOS\RestBundle\Controller\Annotations\View as ViewAnnotation;
 
 class UserController extends AbstractFOSRestController
 {
@@ -39,25 +42,28 @@ class UserController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/api/user/{email}")
+     * @Rest\View(serializerGroups={"user"})
      */
     public function getApiUser(User $user){
-        return $this->json($user);
+        //dump($user);exit();
+        return $this->view($user);
     }
 
     /**
      * @Rest\Get("/api/users")
+     * @Rest\View(serializerGroups={"user"})
      */
     public function getApiUsers(){
         $user = $this->userRepository->findAll();
-        return $this->json($user);
+        return $this->view($user);
     }
 
     /**
      * @Rest\Post("/api/user")
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
-    public function postApiUser(User $user){
-
+    public function postApiUser(User $user)
+    {
         $this->em->persist($user);
         $this->em->flush();
 
@@ -80,16 +86,19 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * @Rest\View(serializerGroups={"SetUser"})
      * @Rest\Patch("/api/users/{id}")
      */
-    public function patchApiUser(User $user, Request $request, ValidatorInterface $validator){
+    public function patchApiUser(User $user, Request $request, ValidatorInterface $validator,SubscriptionRepository $subscriptionRepository){
 
         $firstname = $request->get('firstname');
         $lastname = $request->get("lastname");
         $createdAt = $request->get("createdAt");
         $email = $request->get('email');
         $apiKey = $request->get('apiKey');
+        $subscriptionId = $request->get('subscription');
 
+        dump($user->getSubscription());exit();
 
         if (null !== $firstname){
             $user->setFirstname($firstname);
@@ -109,7 +118,13 @@ class UserController extends AbstractFOSRestController
         if(null !== $apiKey){
             $user->setApiKey($apiKey);
         }
+        if (null !== $subscriptionId){
+            $newSubscription = $subscriptionRepository->find($subscriptionId);
+            $user->setSubscription($newSubscription);
+        }
+
         $validationErrors = $validator->validate($user);
+
         if($validationErrors->count() > 0){
             foreach ($validationErrors as $constraintViolation){
                 $message = $constraintViolation->getMessage();

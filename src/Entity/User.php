@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use http\Exception\UnexpectedValueException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @UniqueEntity("email")
@@ -20,20 +21,24 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("SetUser")
      */
     private $id;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstname;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;
@@ -44,24 +49,35 @@ class User implements UserInterface
     private $apiKey;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="datetime")
      */
     private $CreatedAt;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
 
     /**
+     * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
+     * @Groups("user")
      * @ORM\OneToMany(targetEntity="App\Entity\Card", mappedBy="user")
      */
     private $card;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Subscription", inversedBy="user")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups("user")
+     */
+    private $subscription;
 
     public function __construct()
     {
@@ -211,6 +227,18 @@ class User implements UserInterface
                 $card->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): self
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }
