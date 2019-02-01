@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use http\Exception\UnexpectedValueException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -32,7 +34,7 @@ class User implements UserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;
 
@@ -64,6 +66,13 @@ class User implements UserInterface
     public function __construct()
     {
         $this->card = new ArrayCollection();
+        try {
+            $this->CreatedAt = (new DateTime('now'));
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit();
+        }
+
     }
 
     public function getId(): ?int
