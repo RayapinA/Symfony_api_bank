@@ -21,24 +21,23 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("SetUser")
      */
     private $id;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","subscription"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstname;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","subscription"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","subscription"})
      * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;

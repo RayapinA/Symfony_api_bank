@@ -20,25 +20,25 @@ class Subscription
     private $id;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","subscription"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","subscription"})
      * @ORM\Column(type="string", length=255)
      */
     private $slogan;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","subscription"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $url;
 
     /**
-     *
+     * @Groups({"subscription"})
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="subscription")
      */
     private $user;
