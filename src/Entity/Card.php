@@ -18,7 +18,7 @@ class Card
     private $id;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","card"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
@@ -30,19 +30,19 @@ class Card
     private $creditCardType;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","card"})
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardNumber;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","card"})
      * @ORM\Column(type="string", length=255)
      */
     private $currencyCode;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","card"})
      * @ORM\Column(type="integer")
      */
     private $value;
