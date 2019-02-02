@@ -63,30 +63,30 @@ class UserController extends AbstractFOSRestController
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
     public function postApiUser(User $user)
-    {
-        $this->em->persist($user);
-        $this->em->flush();
+{
+    $this->em->persist($user);
+    $this->em->flush();
 
-       /* $errors = array();
-        if($validationErrors->count() > 0){
-            foreach ($validationErrors as $constraintViolation){
-                $message = $constraintViolation->getMessage();
-                $propertyPath = $constraintViolation->getPropertyPath();
+    /* $errors = array();
+     if($validationErrors->count() > 0){
+         foreach ($validationErrors as $constraintViolation){
+             $message = $constraintViolation->getMessage();
+             $propertyPath = $constraintViolation->getPropertyPath();
 
-                $errors[] = ['messsage' => $message, 'propertyPath' => $propertyPath];
-            }
-        }
+             $errors[] = ['messsage' => $message, 'propertyPath' => $propertyPath];
+         }
+     }
 
-        if (!empty($errors)){
-            throw new BadRequestHttpException(\json_encode($errors));
-        }*/
+     if (!empty($errors)){
+         throw new BadRequestHttpException(\json_encode($errors));
+     }*/
 
-        return $this->json($user);
+    return $this->json($user);
 
-    }
+}
 
     /**
-     * @Rest\View(serializerGroups={"SetUser"})
+     * @Rest\View(serializerGroups={"setUser"})
      * @Rest\Patch("/api/users/{id}")
      */
     public function patchApiUser(User $user, Request $request, ValidatorInterface $validator,SubscriptionRepository $subscriptionRepository){
@@ -98,7 +98,7 @@ class UserController extends AbstractFOSRestController
         $apiKey = $request->get('apiKey');
         $subscriptionId = $request->get('subscription');
 
-        dump($user->getSubscription());exit();
+        //dump($user->getSubscription());exit();
 
         if (null !== $firstname){
             $user->setFirstname($firstname);
@@ -144,7 +144,7 @@ class UserController extends AbstractFOSRestController
 
 
 
-        return $this->json($user);
+        return $this->view($user);
 
     }
 

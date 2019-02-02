@@ -25,56 +25,60 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Groups({"user","subscription"})
+     * @Groups({"user","subscription","setUser"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstname;
 
     /**
-     * @Groups({"user","subscription"})
+     * @Groups({"user","subscription","setUser"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
-     * @Groups({"user","subscription"})
+     * @Groups({"user","subscription","setSusbcription"})
      * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;
 
     /**
+     * @Groups({"user","setUser"})
      * @ORM\Column(type="string", length=255)
      */
     private $apiKey;
 
     /**
+     * @Groups({"user","setUser"})
      * @Groups("user")
      * @ORM\Column(type="datetime")
      */
     private $CreatedAt;
 
     /**
+     * @Groups({"user","setUser"})
      * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
 
     /**
+     * @Groups({"user","setUser"})
      * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","setUser"})
      * @ORM\OneToMany(targetEntity="App\Entity\Card", mappedBy="user")
      */
     private $card;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Subscription", inversedBy="user")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Subscription", inversedBy="user" )
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("user")
+     * @Groups({"user","setUser"})
      */
     private $subscription;
 

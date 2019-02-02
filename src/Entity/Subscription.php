@@ -20,19 +20,19 @@ class Subscription
     private $id;
 
     /**
-     * @Groups({"user","subscription"})
+     * @Groups({"user","subscription","setSubscription","setUser"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @Groups({"user","subscription"})
+     * @Groups({"user","subscription","setSubscription"})
      * @ORM\Column(type="string", length=255)
      */
     private $slogan;
 
     /**
-     * @Groups({"user","subscription"})
+     * @Groups({"user","subscription","setSubscription"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $url;
