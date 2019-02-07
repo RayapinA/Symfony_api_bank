@@ -7,9 +7,12 @@ use App\Repository\CardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CardController extends AbstractFOSRestController
 {
@@ -78,4 +81,64 @@ class CardController extends AbstractFOSRestController
         return $this->view($card);
 
     }
+
+    /**
+     * @Rest\View(serializerGroups={"setCard"})
+     * @Rest\Patch("/api/card/{id}")
+     */
+    public function patchApiCard(Card $card, Request $request, ValidatorInterface $validator)
+    {
+
+        $name = $request->get('name');
+        $creditCardType = $request->get('creditCardType');
+        $creditCardNumber = $request->get('creditCardNumber');
+        $currencyCode = $request->get('currencyCode');
+        $value = $request->get('value');
+
+
+        if (null !== $name) {
+            $card->setName($name);
+        }
+
+        if (null !== $creditCardType) {
+            $card->setCreditCardType($creditCardType);
+        }
+
+        if (null !== $creditCardNumber) {
+            $card->setCreditCardNumber($creditCardNumber);
+        }
+
+        if (null !== $currencyCode) {
+            $card->setCurrencyCode($currencyCode);
+        }
+
+        if (null !== $value) {
+            $card->setValue($value);
+        }
+
+
+        $validationErrors = $validator->validate($card);
+
+        if ($validationErrors->count() > 0) {
+            foreach ($validationErrors as $constraintViolation) {
+                $message = $constraintViolation->getMessage();
+                $propertyPath = $constraintViolation->getPropertyPath();
+
+                $errors[] = ['messsage' => $message, 'propertyPath' => $propertyPath];
+            }
+
+        }
+
+        if (!empty($errors)) {
+            throw new BadRequestHttpException(\json_encode($errors));
+        }
+        $this->em->persist($card);
+        $this->em->flush();
+
+        return $this->view($card);
+
+
+
+    }
+
 }

@@ -18,31 +18,31 @@ class Card
     private $id;
 
     /**
-     * @Groups({"user","card"})
+     * @Groups({"user","card","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @Groups("user")
+     * @Groups({"user","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardType;
 
     /**
-     * @Groups({"user","card"})
+     * @Groups({"user","card","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardNumber;
 
     /**
-     * @Groups({"user","card"})
+     * @Groups({"user","card","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $currencyCode;
 
     /**
-     * @Groups({"user","card"})
+     * @Groups({"user","card","setCard"})
      * @ORM\Column(type="integer")
      */
     private $value;
