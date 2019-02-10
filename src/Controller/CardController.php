@@ -48,6 +48,7 @@ class CardController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"card"})
      */
     public function getApiCards(){
+
         $cards = $this->cardRepository->findAll();
 
         return $this->view($cards);

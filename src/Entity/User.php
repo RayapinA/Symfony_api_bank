@@ -25,25 +25,25 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Groups({"user","subscription","setUser"})
+     * @Groups({"user","subscription","setUser","removeUser"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $firstname;
 
     /**
-     * @Groups({"user","subscription","setUser"})
+     * @Groups({"user","subscription","setUser","removeUser"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
-     * @Groups({"user","subscription","setSusbcription"})
+     * @Groups({"user","subscription","setSusbcription","removeUser"})
      * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;
 
     /**
-     * @Groups({"user","setUser"})
+     * @Groups({"user","setUser","removeUser"})
      * @ORM\Column(type="string", length=255)
      */
     private $apiKey;
@@ -63,15 +63,15 @@ class User implements UserInterface
     private $address;
 
     /**
-     * @Groups({"user","setUser"})
+     * @Groups({"user","setUser","removeUser"})
      * @Groups("user")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
-     * @Groups({"user","setUser"})
-     * @ORM\OneToMany(targetEntity="App\Entity\Card", mappedBy="user")
+     * @Groups({"user","setUser","removeUser"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Card", mappedBy="user", orphanRemoval=true)
      */
     private $card;
 

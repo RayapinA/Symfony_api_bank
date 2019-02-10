@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Manager\CardManager;
+use App\Manager\UserManager;
 use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,19 +55,19 @@ class UserController extends AbstractFOSRestController
      * @Rest\Get("/api/users")
      * @Rest\View(serializerGroups={"user"})
      */
-    public function getApiUsers(){
-        $user = $this->userRepository->findAll();
-        return $this->view($user);
+    public function getApiUsers(UserManager $userManager){
+
+        $users = $userManager->getAllUser();
+        return $this->view($users);
     }
 
     /**
      * @Rest\Post("/api/user")
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
-    public function postApiUser(User $user)
+    public function postApiUser(User $user, UserManager $userManager)
 {
-    $this->em->persist($user);
-    $this->em->flush();
+    $userManager->save($user);
 
     /* $errors = array();
      if($validationErrors->count() > 0){
@@ -89,7 +91,7 @@ class UserController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setUser"})
      * @Rest\Patch("/api/users/{id}")
      */
-    public function patchApiUser(User $user, Request $request, ValidatorInterface $validator,SubscriptionRepository $subscriptionRepository){
+    public function patchApiUser(User $user, Request $request, ValidatorInterface $validator,SubscriptionRepository $subscriptionRepository, UserManager $userManager){
 
         $firstname = $request->get('firstname');
         $lastname = $request->get("lastname");
@@ -139,22 +141,22 @@ class UserController extends AbstractFOSRestController
             throw new BadRequestHttpException(\json_encode($errors));
         }
 
-        $this->em->persist($user);
-        $this->em->flush();
+        $userManager->save($user);
 
         return $this->view($user);
 
     }
 
     /**
+     * @Rest\View(serializerGroups={"removeUser"})
      * @Rest\Delete("/api/user/{id}")
      */
-    public function deleteApiUser(User $user){
+    public function deleteApiUser(User $user,UserManager $userManager)
+    {
 
-        $this->em->remove($user);
-        $this->em->flush();
+        $userManager->remove($user);
 
-        return $this->json($this->userRepository->findAll());
+        return $this->view($this->userRepository->findAll());
     }
 
 }
