@@ -140,5 +140,17 @@ class CardController extends AbstractFOSRestController
 
 
     }
+    /**
+     * @Rest\View(serializerGroups={"setCard"})
+     * @Rest\Delete("/api/card/{id}")
+     */
+    public function deleteApiCard(Card $card){
+
+
+        $this->em->remove($card);
+        $this->em->flush();
+
+        return $this->view($this->cardRepository->findAll());
+    }
 
 }
