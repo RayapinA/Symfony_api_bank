@@ -77,10 +77,15 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Subscription", inversedBy="user" )
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @Groups({"user","setUser"})
      */
     private $subscription;
+
+    /**
+     * @ORM\Column(type="simple_array")
+     */
+    private $roles = [];
 
     public function __construct()
     {
@@ -91,6 +96,7 @@ class User implements UserInterface
             echo $e->getMessage();
             exit();
         }
+        $this->roles = array("ROLE_USER");
 
     }
 
@@ -242,6 +248,13 @@ class User implements UserInterface
     public function setSubscription(?Subscription $subscription): self
     {
         $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
