@@ -1,0 +1,39 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: RAYAPIN Bank Api project
+            description: RAYAPIN ANTOINE
+            version: 1.0.0
+
+        /something:
+            get:
+                security:
+                    - api_key: []
+                responses:
+                    401:
+                        $ref: "#/responses/UnauthorizedError"
+            post:
+                ...
+                responses:
+                    security:
+                        - api_key: []
+                    401:
+                        $ref: "#/responses/UnauthorizedError"
+        responses:
+            UnauthorizedError:
+                description: API key is missing or invalid
+                headers:
+                    WWW_Authenticate:
+                        type: string
+
+        securityDefinitions:
+            api_key:
+                type: apiKey
+                name: X-AUTH-TOKEN
+                in: header
+            security:
+                - api_key: []
+
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

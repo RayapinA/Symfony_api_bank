@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\Repository\CardRepository;
-use App\Repository\UserRepository;
+use App\Manager\CardManager;
+use App\Manager\UserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,13 +15,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class NbCardByUserMailCommand extends Command
 {
     protected static $defaultName = 'app:NbCardByUserMail';
-    private $userRepository;
-    private $cardRepository;
+    private $userManager;
+    private $cardManager;
 
-    public function __construct(UserRepository $userRepository, CardRepository $cardRepository, $name = null)
+    public function __construct(UserManager $userManager, CardManager $cardManager, $name = null)
     {
-        $this->userRepository = $userRepository;
-        $this->cardRepository = $cardRepository;
+        $this->userManager = $userManager;
+        $this->cardManager = $cardManager;
         parent::__construct($name);
     }
 
@@ -39,18 +39,14 @@ class NbCardByUserMailCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $nbCard = 0;
         $email = $input->getArgument('email');
-        $user = $this->userRepository->findOneBy(['email' => $email]);
+
+        $user = $this->userManager->getUserByEmail($email);
 
 
         if ($user !== null) {
 
-            $allCards = $this->cardRepository->findAll();
-            foreach($allCards as $card){
+            $nbCard = $this->cardManager->getNbCardbyUserId($user->getId());
 
-                if($card->getUser()->getId() == $user->getId()){
-                    $nbCard++;
-                }
-            }
 
             $io->note(sprintf('Nb card for this user : %s', $nbCard));
         }

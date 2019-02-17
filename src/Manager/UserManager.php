@@ -16,9 +16,16 @@ class UserManager extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    public function getAllUser(){
+    public function getAllUser()
+    {
 
         return $this->userRepository->findAll();
+    }
+
+    public function getUserByEmail($email)
+    {
+        return $this->userRepository->findOneBy(['email' => $email]);
+
     }
     public function save(User $user)
     {

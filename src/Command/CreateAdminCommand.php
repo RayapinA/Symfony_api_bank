@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\User;
+use App\Manager\UserManager;
 use App\Repository\SubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -16,13 +17,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class CreateAdminCommand extends Command
 {
     protected static $defaultName = 'app:create-admin';
-    private $entityManager;
+    private $userManager;
     private $encoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder){
+    public function __construct(UserManager $userManager){
 
-        $this->entityManager = $entityManager;
-        $this->encoder = $encoder;
+        $this->userManager = $userManager;
         parent::__construct();
 
     }
@@ -31,7 +31,6 @@ class CreateAdminCommand extends Command
         $this
             ->setDescription('Command for create a new Admin')
             ->addArgument('email', InputArgument::REQUIRED, 'email ')
-            ->addArgument('password', InputArgument::REQUIRED, 'paswword ')
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
@@ -40,20 +39,18 @@ class CreateAdminCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $email = $input->getArgument('email');
-        $password = $input->getArgument('password');
         $io->note(sprintf('You passed an argument: %s', $email));
 
         $user = new User();
         $user->setEmail($email);
-        //$passwordEncoded = $this->encoder->encodePassword($user, $password);
+        // GENERER UN APIKEY ALEATOIRE
         $user->setApiKey("ADMINAPIKEY");
 
         $user->setRoles(['ROLE_USER','ROLE_ADMIN']);
         $user->setFirstname('FirstName_Admin');
         $user->setLastname('LastName_Admin');
 
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
+        $this->userManager->save($user);
 
         $io->success(sprintf('You have created a User with email: %s',$email));
 

@@ -20,16 +20,15 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\View as ViewAnnotation;
+use Swagger\Annotations as SWG;
 
 class UserController extends AbstractFOSRestController
 {
     private $userRepository;
-    private $em;
 
-    public function  __construct(UserRepository $userRepository, EntityManagerInterface $em)
+    public function  __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->em = $em;
     }
 
     /**
@@ -43,15 +42,33 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Get(
+     *     path="/api/user/{email}",
+     *     summary="Get one user",
+     *     tags={"User"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Get("/api/user/{email}")
      * @Rest\View(serializerGroups={"user"})
      */
     public function getApiUser(User $user){
-        //dump($user);exit();
+
         return $this->view($user);
     }
 
     /**
+     * @SWG\Get(
+     *     path="/api/users",
+     *     summary="Get all users",
+     *     tags={"User"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Get("/api/users")
      * @Rest\View(serializerGroups={"user"})
      */
@@ -62,6 +79,15 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Post(
+     *     path="/api/user",
+     *     summary="Update One user",
+     *     tags={"User"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Post("/api/user")
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
@@ -88,6 +114,15 @@ class UserController extends AbstractFOSRestController
 }
 
     /**
+     * @SWG\Patch(
+     *     path="/api/users/{id}",
+     *     summary="Update One user",
+     *     tags={"User"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\View(serializerGroups={"setUser"})
      * @Rest\Patch("/api/users/{id}")
      */
@@ -148,6 +183,15 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Delete(
+     *     path="/api/user/{id}",
+     *     summary="Delete one user",
+     *     tags={"User"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\View(serializerGroups={"removeUser"})
      * @Rest\Delete("/api/user/{id}")
      */

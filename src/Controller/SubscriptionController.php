@@ -16,6 +16,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Controller\Annotations\View as ViewAnnotation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Swagger\Annotations as SWG;
 
 class SubscriptionController extends AbstractFOSRestController
 {
@@ -41,6 +42,15 @@ class SubscriptionController extends AbstractFOSRestController
 
 
     /**
+     * @SWG\Get(
+     *     path="/api/subscription/{id}",
+     *     summary="Get one subscription",
+     *     tags={"Subscription"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Get("/api/subscription/{id}")
      * @Rest\View(serializerGroups={"subscription"})
      */
@@ -50,6 +60,15 @@ class SubscriptionController extends AbstractFOSRestController
     }
 
     /**
+     *  * @SWG\Get(
+     *     path="/api/subscriptions",
+     *     summary="Get All subscription",
+     *     tags={"Subscription"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Get("/api/subscriptions")
      * @Rest\View(serializerGroups={"subscription"})
      */
@@ -60,6 +79,15 @@ class SubscriptionController extends AbstractFOSRestController
     }
 
     /**
+     * * @SWG\Post(
+     *     path="/api/subscription",
+     *     summary="Update One subscription",
+     *     tags={"Subscription"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Post("/api/subscription")
      * @ParamConverter("subscription", converter="fos_rest.request_body")
      */
@@ -87,6 +115,15 @@ class SubscriptionController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Patch(
+     *     path="/api/subscription/{id}",
+     *     summary=" Update subscription",
+     *     tags={"Subscription"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\View(serializerGroups={"setSubscription"})
      * @Rest\Patch("/api/subscription/{id}")
      */
@@ -134,6 +171,15 @@ class SubscriptionController extends AbstractFOSRestController
 
 
     /**
+     * @SWG\Delete(
+     *     path="/api/subscription/{id}",
+     *     summary="Delete subscription",
+     *     tags={"Subscription"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\View(serializerGroups={"setSubscription"})
      * @Rest\Delete("/api/subscription/{id}")
      */

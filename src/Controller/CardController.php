@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Swagger\Annotations as SWG;
 
 class CardController extends AbstractFOSRestController
 {
@@ -35,6 +36,15 @@ class CardController extends AbstractFOSRestController
         ]);
     }
     /**
+     * @SWG\Get(
+     *     path="/api/card/{id}",
+     *     summary="Get card by ID",
+     *     tags={"Card"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Get("/api/card/{id}")
      * @Rest\View(serializerGroups={"card"})
      */
@@ -44,6 +54,15 @@ class CardController extends AbstractFOSRestController
     }
 
     /**
+     * @SWG\Get(
+     *     path="/api/cards",
+     *     summary="Get All card",
+     *     tags={"Card"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Get("/api/cards")
      * @Rest\View(serializerGroups={"card"})
      */
@@ -56,8 +75,16 @@ class CardController extends AbstractFOSRestController
 
 
     /**
+     * * @SWG\Post(
+     *     path="/api/card",
+     *     summary="Update One card",
+     *     tags={"Card"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\Post("/api/card")
-     * @Rest\View(serializerGroups={"card"})
      * @ParamConverter("card", converter="fos_rest.request_body")
      */
     public function postApiCard(Card $card)
@@ -79,11 +106,20 @@ class CardController extends AbstractFOSRestController
              throw new BadRequestHttpException(\json_encode($errors));
          }*/
 
-        return $this->view($card);
+        return $this->json($card);
 
     }
 
     /**
+     * @SWG\Patch(
+     *     path="/api/card/{id}",
+     *     summary=" Update card",
+     *     tags={"Card"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\View(serializerGroups={"setCard"})
      * @Rest\Patch("/api/card/{id}")
      */
@@ -142,6 +178,15 @@ class CardController extends AbstractFOSRestController
 
     }
     /**
+     * @SWG\Delete(
+     *     path="/api/card/{id}",
+     *     summary=" Delete card",
+     *     tags={"Card"},
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="OK",
+     * )
      * @Rest\View(serializerGroups={"setCard"})
      * @Rest\Delete("/api/card/{id}")
      */

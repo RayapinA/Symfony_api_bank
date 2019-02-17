@@ -17,6 +17,9 @@
     "doctrine/common": {
         "version": "v2.10.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "v1.3.1"
+    },
     "doctrine/dbal": {
         "version": "v2.9.2"
     },
@@ -65,6 +68,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "exsyst/swagger": {
+        "version": "v0.4.1"
+    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -74,11 +80,44 @@
             "ref": "258300d52be6ad59b32a888d5ddafbf9638540ff"
         }
     },
+    "fzaninotto/faker": {
+        "version": "v1.8.0"
+    },
+    "hautelook/alice-bundle": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.1",
+            "ref": "71822522faf7ed2792d86b7f94ce73443358ccb9"
+        }
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
     "monolog/monolog": {
         "version": "1.24.0"
+    },
+    "myclabs/deep-copy": {
+        "version": "1.8.1"
+    },
+    "nelmio/alice": {
+        "version": "3.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.2",
+            "ref": "0b9900ece737bec7752e4155c0164639dd9b0cb0"
+        }
+    },
+    "nelmio/api-doc-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        }
     },
     "nikic/php-parser": {
         "version": "v4.1.1"
@@ -110,6 +149,18 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "sebastian/comparator": {
+        "version": "3.0.2"
+    },
+    "sebastian/diff": {
+        "version": "3.0.2"
+    },
+    "sebastian/exporter": {
+        "version": "3.1.0"
+    },
+    "sebastian/recursion-context": {
+        "version": "3.0.0"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -118,6 +169,9 @@
             "version": "5.2",
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
+    },
+    "symfony/asset": {
+        "version": "v4.2.3"
     },
     "symfony/cache": {
         "version": "v4.2.1"
@@ -205,6 +259,9 @@
             "version": "3.1",
             "ref": "18ebf5a940573a20de06f9c4060101eeb438cf3d"
         }
+    },
+    "symfony/options-resolver": {
+        "version": "v4.2.3"
     },
     "symfony/orm-pack": {
         "version": "v1.0.5"
@@ -314,6 +371,15 @@
     "symfony/yaml": {
         "version": "v4.2.1"
     },
+    "theofidry/alice-data-fixtures": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fe5a50faf580eb58f08ada2abe8afbd2d4941e05"
+        }
+    },
     "twig/twig": {
         "version": "v2.6.0"
     },
@@ -331,5 +397,8 @@
     },
     "zendframework/zend-eventmanager": {
         "version": "3.2.1"
+    },
+    "zircote/swagger-php": {
+        "version": "2.0.13"
     }
 }
