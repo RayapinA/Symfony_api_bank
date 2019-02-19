@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CardRepository")
@@ -18,30 +19,35 @@ class Card
     private $id;
 
     /**
+     * @Assert\NotBlank
      * @Groups({"user","card","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank
      * @Groups({"user","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardType;
 
     /**
+     * @Assert\NotBlank
      * @Groups({"user","card","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $creditCardNumber;
 
     /**
+     * @Assert\NotBlank
      * @Groups({"user","card","setCard"})
      * @ORM\Column(type="string", length=255)
      */
     private $currencyCode;
 
     /**
+     * @Assert\NotBlank
      * @Groups({"user","card","setCard"})
      * @ORM\Column(type="integer")
      */

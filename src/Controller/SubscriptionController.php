@@ -94,11 +94,12 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\Post("/api/subscription")
      * @ParamConverter("subscription", converter="fos_rest.request_body")
      */
-    public function postApiSubscription(Subscription $subscription, SubscriptionManager $subscriptionManager)
+    public function postApiSubscription(Subscription $subscription, SubscriptionManager $subscriptionManager, ValidatorInterface $validator)
     {
         $subscriptionManager->save($subscription);
 
-        /* $errors = array();
+        $validationErrors = $validator->validate($subscription);
+         $errors = array();
          if($validationErrors->count() > 0){
              foreach ($validationErrors as $constraintViolation){
                  $message = $constraintViolation->getMessage();
@@ -110,7 +111,7 @@ class SubscriptionController extends AbstractFOSRestController
 
          if (!empty($errors)){
              throw new BadRequestHttpException(\json_encode($errors));
-         }*/
+         }
 
         return $this->json($subscription);
 

@@ -10,6 +10,7 @@ use http\Exception\UnexpectedValueException;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("email")
@@ -31,24 +32,28 @@ class User implements UserInterface
     private $firstname;
 
     /**
+     *
      * @Groups({"user","subscription","setUser","removeUser"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastname;
 
     /**
+     * @Assert\Email
      * @Groups({"user","subscription","setSusbcription","removeUser"})
      * @ORM\Column(type="string", unique=true, length=255)
      */
     private $email;
 
     /**
+     * @Assert\NotBlank
      * @Groups({"user","setUser","removeUser"})
      * @ORM\Column(type="string", length=255)
      */
     private $apiKey;
 
     /**
+     * @Assert\DateTime
      * @Groups({"user","setUser"})
      * @Groups("user")
      * @ORM\Column(type="datetime")
@@ -89,14 +94,16 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->card = new ArrayCollection();
+
         try {
             $this->CreatedAt = (new DateTime('now'));
         } catch (\Exception $e) {
             echo $e->getMessage();
             exit();
         }
+        $this->card = new ArrayCollection();
         $this->roles = array("ROLE_USER");
+        $this->apiKey = uniqid();
 
     }
 

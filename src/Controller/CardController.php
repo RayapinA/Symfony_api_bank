@@ -88,11 +88,12 @@ class CardController extends AbstractFOSRestController
      * @Rest\Post("/api/card")
      * @ParamConverter("card", converter="fos_rest.request_body")
      */
-    public function postApiCard(Card $card, CardManager $cardManager)
+    public function postApiCard(Card $card, CardManager $cardManager, ValidatorInterface $validator)
     {
         $cardManager->save($card);
 
-        /* $errors = array();
+        $validationErrors = $validator->validate($card);
+         $errors = array();
          if($validationErrors->count() > 0){
              foreach ($validationErrors as $constraintViolation){
                  $message = $constraintViolation->getMessage();
@@ -104,7 +105,7 @@ class CardController extends AbstractFOSRestController
 
          if (!empty($errors)){
              throw new BadRequestHttpException(\json_encode($errors));
-         }*/
+         }
 
         return $this->json($card);
 

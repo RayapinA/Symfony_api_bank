@@ -91,11 +91,12 @@ class UserController extends AbstractFOSRestController
      * @Rest\Post("/api/user")
      * @ParamConverter("user", converter="fos_rest.request_body")
      */
-    public function postApiUser(User $user, UserManager $userManager)
+    public function postApiUser(User $user, UserManager $userManager, ValidatorInterface $validator)
 {
     $userManager->save($user);
 
-    /* $errors = array();
+    $validationErrors = $validator->validate($user);
+     $errors = array();
      if($validationErrors->count() > 0){
          foreach ($validationErrors as $constraintViolation){
              $message = $constraintViolation->getMessage();
@@ -107,7 +108,7 @@ class UserController extends AbstractFOSRestController
 
      if (!empty($errors)){
          throw new BadRequestHttpException(\json_encode($errors));
-     }*/
+     }
 
     return $this->json($user);
 
