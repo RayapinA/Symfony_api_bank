@@ -36,6 +36,11 @@ class SubscriptionManager
         $this->subscriptionDoctrine->flush();
     }
 
+    public function Rechange()
+    {
+        return $this->subscriptionRepository->findOneBy(['name' => 'rechange']);
+    }
+
     public function remove(Subscription $subscription)
     {
         $this->subscriptionDoctrine->persist($subscription);

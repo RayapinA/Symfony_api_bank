@@ -189,7 +189,7 @@ class SubscriptionController extends AbstractFOSRestController
         // Expliquer au professeur cette partie !!
 
         $userForThisSubscription = $subscription->getUser();
-        $subscriptionDeRechange = $this->subscriptionRepository->findOneBy(['name' => 'rechange']);
+        $subscriptionDeRechange = $subscriptionManager->Rechange();
 
         foreach($userForThisSubscription as $user){
             $user->setSubscription($subscriptionDeRechange);
