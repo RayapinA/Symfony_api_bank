@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Card;
+use App\Manager\CardManager;
 use App\Repository\CardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -66,9 +67,9 @@ class CardController extends AbstractFOSRestController
      * @Rest\Get("/api/cards")
      * @Rest\View(serializerGroups={"card"})
      */
-    public function getApiCards(){
+    public function getApiCards(CardManager $cardManager){
 
-        $cards = $this->cardRepository->findAll();
+        $cards = $cardManager->getAllCard();
 
         return $this->view($cards);
     }
@@ -87,10 +88,9 @@ class CardController extends AbstractFOSRestController
      * @Rest\Post("/api/card")
      * @ParamConverter("card", converter="fos_rest.request_body")
      */
-    public function postApiCard(Card $card)
+    public function postApiCard(Card $card, CardManager $cardManager)
     {
-        $this->em->persist($card);
-        $this->em->flush();
+        $cardManager->save($card);
 
         /* $errors = array();
          if($validationErrors->count() > 0){
@@ -123,7 +123,7 @@ class CardController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setCard"})
      * @Rest\Patch("/api/card/{id}")
      */
-    public function patchApiCard(Card $card, Request $request, ValidatorInterface $validator)
+    public function patchApiCard(Card $card, Request $request, ValidatorInterface $validator, CardManager $cardManager)
     {
 
         $name = $request->get('name');
@@ -169,8 +169,7 @@ class CardController extends AbstractFOSRestController
         if (!empty($errors)) {
             throw new BadRequestHttpException(\json_encode($errors));
         }
-        $this->em->persist($card);
-        $this->em->flush();
+        $cardManager->save($card);
 
         return $this->view($card);
 
@@ -190,13 +189,11 @@ class CardController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setCard"})
      * @Rest\Delete("/api/card/{id}")
      */
-    public function deleteApiCard(Card $card){
+    public function deleteApiCard(Card $card, CardManager $cardManager)
+    {
+        $cardManager->remove($card);
 
-
-        $this->em->remove($card);
-        $this->em->flush();
-
-        return $this->view($this->cardRepository->findAll());
+        return $this->view($cardManager->getAllCard());
     }
 
 }

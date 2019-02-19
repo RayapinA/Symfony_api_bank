@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Subscription;
+use App\Manager\CardManager;
+use App\Manager\SubscriptionManager;
+use App\Manager\UserManager;
 use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -72,9 +75,9 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\Get("/api/subscriptions")
      * @Rest\View(serializerGroups={"subscription"})
      */
-    public function getApiSubscriptions()
+    public function getApiSubscriptions(SubscriptionManager $subscriptionManager)
     {
-        $subscription = $this->subscriptionRepository->findAll();
+        $subscription = $subscriptionManager->getAllSubscription();
         return $this->view($subscription);
     }
 
@@ -91,10 +94,9 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\Post("/api/subscription")
      * @ParamConverter("subscription", converter="fos_rest.request_body")
      */
-    public function postApiSubscription(Subscription $subscription)
+    public function postApiSubscription(Subscription $subscription, SubscriptionManager $subscriptionManager)
     {
-        $this->em->persist($subscription);
-        $this->em->flush();
+        $subscriptionManager->save($subscription);
 
         /* $errors = array();
          if($validationErrors->count() > 0){
@@ -127,7 +129,7 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setSubscription"})
      * @Rest\Patch("/api/subscription/{id}")
      */
-    public function patchApiSubscription(Subscription $subscription, Request $request, ValidatorInterface $validator)
+    public function patchApiSubscription(Subscription $subscription, Request $request, ValidatorInterface $validator, SubscriptionManager $subscriptionManager)
     {
 
         $name = $request->get('name');
@@ -163,8 +165,8 @@ class SubscriptionController extends AbstractFOSRestController
         if (!empty($errors)) {
             throw new BadRequestHttpException(\json_encode($errors));
         }
-        $this->em->persist($subscription);
-        $this->em->flush();
+
+        $subscriptionManager->save($subscription);
 
         return $this->view($subscription);
     }
@@ -183,7 +185,7 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setSubscription"})
      * @Rest\Delete("/api/subscription/{id}")
      */
-    public function deleteApiSubscription(Subscription $subscription, UserRepository $userRepository){
+    public function deleteApiSubscription(Subscription $subscription, UserRepository $userRepository, SubscriptionManager $subscriptionManager, UserManager $userManager){
         // Expliquer au professeur cette partie !!
 
         $userForThisSubscription = $subscription->getUser();
@@ -193,12 +195,10 @@ class SubscriptionController extends AbstractFOSRestController
             $user->setSubscription($subscriptionDeRechange);
         }
 
-        $this->em->persist($user);
+        $userManager->save($user);
+        $subscriptionManager->remove($subscription);
 
-        $this->em->remove($subscription);
-        $this->em->flush();
-
-        return $this->view($this->subscriptionRepository->findAll());
+        return $this->view($subscriptionManager->getAllSubscription());
     }
 
 }

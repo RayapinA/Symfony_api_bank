@@ -5,15 +5,18 @@ namespace App\Manager;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserManager extends AbstractController
 {
     private $userRepository;
+    private $userDoctrine;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $em)
     {
         $this->userRepository = $userRepository;
+        $this->userDoctrine = $em;
     }
 
     public function getAllUser()
@@ -29,13 +32,13 @@ class UserManager extends AbstractController
     }
     public function save(User $user)
     {
-        $this->getDoctrine()->getManager()->persist($user);
-        $this->getDoctrine()->getManager()->flush();
+        $this->userDoctrine->persist($user);
+        $this->userDoctrine->flush();
     }
     public function remove(User $user)
     {
-
-        $this->getDoctrine()->getManager()->remove($user);
-        $this->getDoctrine()->getManager()->flush();
+        $this->userDoctrine->remove($user);
+        $this->userDoctrine->flush();
+        $this->userDoctrine->clear();
     }
 }
