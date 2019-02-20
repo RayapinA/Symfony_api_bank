@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Subscription;
-use App\Manager\CardManager;
 use App\Manager\SubscriptionManager;
-use App\Manager\UserManager;
 use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -75,9 +73,9 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\Get("/api/subscriptions")
      * @Rest\View(serializerGroups={"subscription"})
      */
-    public function getApiSubscriptions(SubscriptionManager $subscriptionManager)
+    public function getApiSubscriptions( SubscriptionManager $subscriptionManager)
     {
-        $subscription = $subscriptionManager->getAllSubscription();
+        $subscription = $this->subscriptionRepository->findAll();
         return $this->view($subscription);
     }
 
@@ -94,12 +92,12 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\Post("/api/subscription")
      * @ParamConverter("subscription", converter="fos_rest.request_body")
      */
-    public function postApiSubscription(Subscription $subscription, SubscriptionManager $subscriptionManager, ValidatorInterface $validator)
+    public function postApiSubscription(Subscription $subscription)
     {
-        $subscriptionManager->save($subscription);
+        $this->em->persist($subscription);
+        $this->em->flush();
 
-        $validationErrors = $validator->validate($subscription);
-         $errors = array();
+        /* $errors = array();
          if($validationErrors->count() > 0){
              foreach ($validationErrors as $constraintViolation){
                  $message = $constraintViolation->getMessage();
@@ -111,7 +109,7 @@ class SubscriptionController extends AbstractFOSRestController
 
          if (!empty($errors)){
              throw new BadRequestHttpException(\json_encode($errors));
-         }
+         }*/
 
         return $this->json($subscription);
 
@@ -130,7 +128,7 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setSubscription"})
      * @Rest\Patch("/api/subscription/{id}")
      */
-    public function patchApiSubscription(Subscription $subscription, Request $request, ValidatorInterface $validator, SubscriptionManager $subscriptionManager)
+    public function patchApiSubscription(Subscription $subscription, Request $request, ValidatorInterface $validator)
     {
 
         $name = $request->get('name');
@@ -166,8 +164,8 @@ class SubscriptionController extends AbstractFOSRestController
         if (!empty($errors)) {
             throw new BadRequestHttpException(\json_encode($errors));
         }
-
-        $subscriptionManager->save($subscription);
+        $this->em->persist($subscription);
+        $this->em->flush();
 
         return $this->view($subscription);
     }
@@ -186,20 +184,22 @@ class SubscriptionController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"setSubscription"})
      * @Rest\Delete("/api/subscription/{id}")
      */
-    public function deleteApiSubscription(Subscription $subscription, UserRepository $userRepository, SubscriptionManager $subscriptionManager, UserManager $userManager){
+    public function deleteApiSubscription(Subscription $subscription, UserRepository $userRepository){
         // Expliquer au professeur cette partie !!
 
         $userForThisSubscription = $subscription->getUser();
-        $subscriptionDeRechange = $subscriptionManager->Rechange();
+        $subscriptionDeRechange = $this->subscriptionRepository->findOneBy(['name' => 'rechange']);
 
         foreach($userForThisSubscription as $user){
             $user->setSubscription($subscriptionDeRechange);
         }
 
-        $userManager->save($user);
-        $subscriptionManager->remove($subscription);
+        $this->em->persist($user);
 
-        return $this->view($subscriptionManager->getAllSubscription());
+        $this->em->remove($subscription);
+        $this->em->flush();
+
+        return $this->view($this->subscriptionRepository->findAll());
     }
 
 }

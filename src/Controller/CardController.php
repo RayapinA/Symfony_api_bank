@@ -107,7 +107,8 @@ class CardController extends AbstractFOSRestController
              throw new BadRequestHttpException(\json_encode($errors));
          }
 
-        return $this->json($card);
+         //Bug Serializer
+        //return $this->json($card);
 
     }
 
